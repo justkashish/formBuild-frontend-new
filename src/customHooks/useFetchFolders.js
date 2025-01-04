@@ -3,7 +3,7 @@ import { useUserContext } from "../Contexts/UserContext";
 import { api } from "../api/api";
 
 const useFetchFolders = () => {
-    console.log("Im runni")
+    console.log("It is running")
     const { setFolders, setSelectedFolder } = useUserContext(); // Destructure setUserData from context
     const [loading, setLoading] = useState(true); // For loading state
     const [error, setError] = useState(null); // For error state

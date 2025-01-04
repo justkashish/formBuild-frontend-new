@@ -6,7 +6,7 @@ import { api, fetchUserData } from "../../api/api";
 const Switch = () => {
   const { theme, setTheme } = useUserContext();
   const userData = JSON.parse(localStorage.getItem("userData"));
-  
+
   // Set initial state based on localStorage or default to 'dark'
   const [checked, setChecked] = useState(
     userData?.theme === "dark" ? true : false
@@ -19,7 +19,7 @@ const Switch = () => {
         try {
           const response = await fetchUserData(userId); // Fetch user data from API
           console.log("User data fetched:", response.data);
-          
+
           // Set theme in context and update localStorage
           setTheme(response.data.user.theme);
           localStorage.setItem("theme", response.data.user.theme); // Save theme in localStorage
@@ -28,7 +28,7 @@ const Switch = () => {
         }
       }
     };
-    
+
     // Fetch and set the theme on initial load
     getTheme();
   }, []);
@@ -66,7 +66,9 @@ const Switch = () => {
     <div className={styles.switch}>
       <button
         id="basic-switch"
-        className={`${styles.mdcSwitch} ${checked ? styles.mdcSwitchSelected : ""}`}
+        className={`${styles.mdcSwitch} ${
+          checked ? styles.mdcSwitchSelected : ""
+        }`}
         type="button"
         role="switch"
         aria-checked={checked}
@@ -81,13 +83,17 @@ const Switch = () => {
             <div className={styles.mdcSwitchRipple}></div>
             <div className={styles.mdcSwitchIcons}>
               <svg
-                className={`${styles.mdcSwitchIcon} ${checked ? "" : styles.mdcSwitchIconHidden}`}
+                className={`${styles.mdcSwitchIcon} ${
+                  checked ? "" : styles.mdcSwitchIconHidden
+                }`}
                 viewBox="0 0 24 24"
               >
                 <path d="M19.69,5.23L8.96,15.96l-4.23-4.23L2.96,13.5l6,6L21.46,7L19.69,5.23z" />
               </svg>
               <svg
-                className={`${styles.mdcSwitchIcon} ${!checked ? "" : styles.mdcSwitchIconHidden}`}
+                className={`${styles.mdcSwitchIcon} ${
+                  !checked ? "" : styles.mdcSwitchIconHidden
+                }`}
                 viewBox="0 0 24 24"
               >
                 <path d="M20 13H4v-2h16v2z" />

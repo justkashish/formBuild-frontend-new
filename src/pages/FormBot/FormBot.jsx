@@ -37,8 +37,7 @@ const FormBot = () => {
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (chatDisplayRef.current) {
-      chatDisplayRef.current.scrollTop =
-        chatDisplayRef.current.scrollHeight;
+      chatDisplayRef.current.scrollTop = chatDisplayRef.current.scrollHeight;
     }
   }, [messages]); // Scroll whenever messages update
 
@@ -63,23 +62,17 @@ const FormBot = () => {
         return;
       }
       try {
-        const response = await api.get(
-          `/form/${queryParams.userId}`,
-          {
-            params: {
-              formName: queryParams.formName,
-              folderName: queryParams.folderName,
-            },
-          }
-        ); // Updated API endpoint
+        const response = await api.get(`/form/${queryParams.userId}`, {
+          params: {
+            formName: queryParams.formName,
+            folderName: queryParams.folderName,
+          },
+        }); // Updated API endpoint
         if (response.status === 200) {
           const data = response.data;
           console.log(response);
 
-          sessionStorage.setItem(
-            "flowData",
-            JSON.stringify(data.elements)
-          );
+          sessionStorage.setItem("flowData", JSON.stringify(data.elements));
           setFlowData(data.elements);
         } else {
           console.error("Failed to fetch flow data");
@@ -99,7 +92,7 @@ const FormBot = () => {
   }, [flowData, currentIndex]);
   const processFlowData = (index) => {
     const currentFlow = flowData[index];
-    
+
     if (!currentFlow) return; // Exit if no flow data
 
     // Check for duplicate messages based on unique index instead of just content
@@ -108,110 +101,101 @@ const FormBot = () => {
     setIsInputDisabled(true);
 
     const newMessage = {
-        type: "bot",
-        content: currentFlow.content,
-        index, // Attach the index for uniqueness
+      type: "bot",
+      content: currentFlow.content,
+      index, // Attach the index for uniqueness
     };
 
     switch (currentFlow.buttonType) {
-        case "TextBubble":
-            setInputPlaceholder("Type your message...");
-            setMessages((prev) => [...prev, newMessage]);
-            setTimeout(() => setCurrentIndex((prev) => prev + 1), 1000);
-            break;
-        case "Image":
-            setMessages((prev) => [
-                ...prev,
-                { ...newMessage, isImage: true },
-            ]);
-            setTimeout(() => setCurrentIndex((prev) => prev + 1), 1000);
-            break;
-        case "Gif":
-            setMessages((prev) => [
-                ...prev,
-                { ...newMessage, isGif: true },
-            ]);
-            setTimeout(() => setCurrentIndex((prev) => prev + 1), 1000);
-            break;
-        case "TextInput":
-            if (!hasSentTextInput) {
-                setMessages((prev) => [...prev, { type: "bot", content: " " }]);
-                setHasSentTextInput(true);
-                setIsInputDisabled(false);
-                setInputPlaceholder("Please enter your response.");
-            }
-            break; // Do not increment index automatically
-        case "Date":
-            if (!hasSentDatePicker) {
-                setMessages((prev) => [
-                    ...prev,
-                    { type: "bot", content: "Please select a date." },
-                ]);
-                setShowDatePicker(true);
-                setHasSentDatePicker(true);
-            }
-            break; // Do not increment index automatically
-        case "Rating":
-            if (
-                !hasSentRatingInput ||
-                currentIndex !== flowData.findIndex(
-                    (item) => item.buttonType === "Rating"
-                )
-            ) {
-                setMessages((prev) => [
-                    ...prev,
-                    {
-                        type: "bot",
-                        content: "Please provide a rating (1 to 5 stars).",
-                    },
-                ]);
-                setShowRatingInput(true);
-                setHasSentRatingInput(true);
-                setIsInputDisabled(false);
-            }
-            break; // Do not increment index automatically
-        case "Number":
-            setInputType("number");
-            setInputPlaceholder("Please enter a number.");
-            setMessages((prev) => [
-                ...prev,
-                { ...newMessage, content: "Please enter a number." },
-            ]);
-            setIsInputDisabled(false);
-            break; // Do not increment index automatically
-        case "Email":
-            setInputType("email");
-            setInputPlaceholder("Please enter your email.");
-            setMessages((prev) => [
-                ...prev,
-                { ...newMessage, content: "Please enter your email." },
-            ]);
-            setIsInputDisabled(false);
-            break; // Do not increment index automatically
-        case "Phone":
-            setInputType("phone");
-            setInputPlaceholder("Please enter your phone number.");
-            setMessages((prev) => [
-                ...prev,
-                { ...newMessage, content: "Please enter your phone number." },
-            ]);
-            setIsInputDisabled(false);
-            break; // Do not increment index automatically
-        case "Button":
-            setMessages((prev) => [
-                ...prev,
-                { ...newMessage, content: "Press the Submit Button!" },
-            ]);
-            setHasSentTextInput(false);
-            setInputPlaceholder("");
-            setIsSubmitButton(true);
-            break;
-        default:
-            break;
+      case "TextBubble":
+        setInputPlaceholder("Type your message...");
+        setMessages((prev) => [...prev, newMessage]);
+        setTimeout(() => setCurrentIndex((prev) => prev + 1), 1000);
+        break;
+      case "Image":
+        setMessages((prev) => [...prev, { ...newMessage, isImage: true }]);
+        setTimeout(() => setCurrentIndex((prev) => prev + 1), 1000);
+        break;
+      case "Gif":
+        setMessages((prev) => [...prev, { ...newMessage, isGif: true }]);
+        setTimeout(() => setCurrentIndex((prev) => prev + 1), 1000);
+        break;
+      case "TextInput":
+        if (!hasSentTextInput) {
+          setMessages((prev) => [...prev, { type: "bot", content: " " }]);
+          setHasSentTextInput(true);
+          setIsInputDisabled(false);
+          setInputPlaceholder("Please enter your response.");
+        }
+        break; // Do not increment index automatically
+      case "Date":
+        if (!hasSentDatePicker) {
+          setMessages((prev) => [
+            ...prev,
+            { type: "bot", content: "Please select a date." },
+          ]);
+          setShowDatePicker(true);
+          setHasSentDatePicker(true);
+        }
+        break; // Do not increment index automatically
+      case "Rating":
+        if (
+          !hasSentRatingInput ||
+          currentIndex !==
+            flowData.findIndex((item) => item.buttonType === "Rating")
+        ) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              type: "bot",
+              content: "Please provide a rating (1 to 5 stars).",
+            },
+          ]);
+          setShowRatingInput(true);
+          setHasSentRatingInput(true);
+          setIsInputDisabled(false);
+        }
+        break; // Do not increment index automatically
+      case "Number":
+        setInputType("number");
+        setInputPlaceholder("Please enter a number.");
+        setMessages((prev) => [
+          ...prev,
+          { ...newMessage, content: "Please enter a number." },
+        ]);
+        setIsInputDisabled(false);
+        break; // Do not increment index automatically
+      case "Email":
+        setInputType("email");
+        setInputPlaceholder("Please enter your email.");
+        setMessages((prev) => [
+          ...prev,
+          { ...newMessage, content: "Please enter your email." },
+        ]);
+        setIsInputDisabled(false);
+        break; // Do not increment index automatically
+      case "Phone":
+        setInputType("phone");
+        setInputPlaceholder("Please enter your phone number.");
+        setMessages((prev) => [
+          ...prev,
+          { ...newMessage, content: "Please enter your phone number." },
+        ]);
+        setIsInputDisabled(false);
+        break; // Do not increment index automatically
+      case "Button":
+        setMessages((prev) => [
+          ...prev,
+          { ...newMessage, content: "Press the Submit Button!" },
+        ]);
+        setHasSentTextInput(false);
+        setInputPlaceholder("");
+        setIsSubmitButton(true);
+        break;
+      default:
+        break;
     }
-};
-
-
+  };
 
   const handleUserInput = () => {
     console.log("tempDate", tempDate);
@@ -232,7 +216,7 @@ const FormBot = () => {
         ...prev,
         { type: "user", content: tempDate.toLocaleDateString() }, // Formats the date as a string
       ]);
-      
+
       setResponses((prev) => [...prev, response]);
       setTempDate(null);
       setShowDatePicker(false);
@@ -283,10 +267,7 @@ const FormBot = () => {
         updateAnalytics("start"); // Update analytics for the first user response
       }
 
-      setMessages((prev) => [
-        ...prev,
-        { type: "user", content: userInput },
-      ]);
+      setMessages((prev) => [...prev, { type: "user", content: userInput }]);
       setResponses((prev) => [...prev, response]);
       setUserInput("");
       setCurrentIndex((prev) => prev + 1);
@@ -300,14 +281,11 @@ const FormBot = () => {
   // New function to update analytics
   const updateAnalytics = async (type) => {
     try {
-      const response = await api.put(
-        `/analytics/${queryParams.userId}`,
-        {
-          folderName: queryParams.folderName,
-          formName: queryParams.formName,
-          analytics: type,
-        }
-      );
+      const response = await api.put(`/analytics/${queryParams.userId}`, {
+        folderName: queryParams.folderName,
+        formName: queryParams.formName,
+        analytics: type,
+      });
       console.log(`Analytics updated with ${type}:`, response);
     } catch (error) {
       console.error("Error updating analytics with 'start':", error);
@@ -398,9 +376,7 @@ const FormBot = () => {
           <div
             key={index}
             className={
-              msg.type === "bot"
-                ? styles.botMessage
-                : styles.userMessage
+              msg.type === "bot" ? styles.botMessage : styles.userMessage
             }
           >
             {msg.isImage || msg.isGif ? (
@@ -456,15 +432,15 @@ const FormBot = () => {
             />
           )}
 
-{showDatePicker && (
-        <DatePicker
-          selected={tempDate}
-          onChange={(date) => handleDateSelection(date)}
-          dateFormat="yyyy/MM/dd"
-          className={styles.datePicker}
-          placeholderText="Select date and time"
-        />
-      )}
+          {showDatePicker && (
+            <DatePicker
+              selected={tempDate}
+              onChange={(date) => handleDateSelection(date)}
+              dateFormat="yyyy/MM/dd"
+              className={styles.datePicker}
+              placeholderText="Select date and time"
+            />
+          )}
           {showDatePicker ? (
             <button
               disabled={showDatePicker && !tempDate}
@@ -500,11 +476,7 @@ const FormBot = () => {
             onClick={submitFormResponses}
             className={`${styles.submitButton} ${styles.final}`}
           >
-            {isLoading ? (
-              <ClipLoader color="white" size={20} />
-            ) : (
-              "Submit"
-            )}
+            {isLoading ? <ClipLoader color="white" size={20} /> : "Submit"}
           </button>
         </div>
       )}
