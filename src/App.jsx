@@ -11,7 +11,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import FormEditor from "./pages/FormEditor/FormEditor";
 import FormBot from "./pages/FormBot/FormBot";
-import ThankYou from "./pages/Submit/Submit";
+import Submit from "./pages/Submit/Submit";
 function App() {
   let baseURL;
 
@@ -46,8 +46,7 @@ function App() {
     // Display loading screen while waiting
     return (
       <div className="loading-screen">
-        <h1>Form Bot</h1>
-        <p>Waking up the app. Please wait...</p>
+        
         <ClipLoader color="#ffffff" size={50} />
       </div>
     );
@@ -61,7 +60,7 @@ function App() {
         <Route path="/login/" element={<LoginPage />} />
         <Route path="/editor/" element={<FormEditor />} />
         <Route path="/formbot" element={<FormBot/>}/>
-        <Route path="/thankyou" element={<ThankYou/>}/>
+        <Route path="/submit" element={<Submit/>}/>
         <Route path="*" element={<LandingPage />} />
       </Routes>
     </Router>
