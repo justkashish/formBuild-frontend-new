@@ -35,7 +35,6 @@ const handleSignOut = () => {
           />
           <h1>FormBot</h1>
         </div>
-       
         <div className={styles.rightContainer}>
           {!isLoggedIn ? (
             <button onClick={handleLogin} className={styles.signIn}>

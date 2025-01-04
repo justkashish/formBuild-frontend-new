@@ -12,7 +12,7 @@ const useAuth = () => {
         const authenticateUser = async() => {
             try {
                 const userId = localStorage.getItem("userId");
-
+                console.log(userId);
                 if (!userId) {
                     // Redirect to login if userId is not in localStorage
                     navigate("/login");
